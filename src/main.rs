@@ -18,9 +18,9 @@ impl Block {
     fn generate_random_chars() -> String {
         thread_rng()
             .sample_iter(&Alphanumeric)
-            .filter(|c| c.is_ascii_alphabetic())
+            .filter(|random_char| random_char.is_ascii_alphabetic())
             .take(4)
-            .map(|c| c as char)
+            .map(|random_char| random_char  as char)
             .collect()
 
     }

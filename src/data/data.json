@@ -1,0 +1,10 @@
+{
+    "persoenlicheDaten": {
+        "vorname": "Max",
+        "nachname": "Mustermann",
+        "geburtsdatum": "01.01.1970",
+        "geburtsort": "Musterstadt",
+        "familienstand": "ledig",
+        "kinder": 0
+    }
+}

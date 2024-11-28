@@ -1,5 +1,7 @@
 pub mod tests;
-
+use serde::{Serialize, Deserialize};
+use std::fs;
+use serde_json::Result;
 use std::time::{SystemTime, UNIX_EPOCH};
 use rand::{thread_rng, Rng};
 use rand::distributions::Alphanumeric;
@@ -50,12 +52,49 @@ impl Block {
     }
 }
 
+#[derive(Serialize, Deserialize, Debug)]
+struct PersoenlicheDaten {
+    vorname: String,
+    nachname: String,
+    geburtsdatum: String,
+    geburtsort: String,
+    familienstand: String,
+    kinder: u8,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+struct BlockData {
+    persoenlicheDaten: PersoenlicheDaten,
+}
+
+
 #[derive(Debug)]
 struct Blockchain {
     chain: Vec<Block>,
 }
 
 impl Blockchain {
+
+    fn add_block_from_file(&mut self, file_path: &str) {
+        println!("Reading data from file: {}", file_path);
+        let file_content = fs::read_to_string(file_path).expect("Unable to read file");
+        let block_data: BlockData = serde_json::from_str(&file_content).expect("Unable to parse JSON");
+    
+        let data = format!(
+            "Name: {} {}, Geburtsdatum: {}, Geburtsort: {}, Familienstand: {}, Kinder: {}",
+            block_data.persoenlicheDaten.vorname,
+            block_data.persoenlicheDaten.nachname,
+            block_data.persoenlicheDaten.geburtsdatum,
+            block_data.persoenlicheDaten.geburtsort,
+            block_data.persoenlicheDaten.familienstand,
+            block_data.persoenlicheDaten.kinder
+        );
+    
+        self.add_block(data);
+    }
+
+
+
     fn new() -> Self {
         let genesis_block = Block::new(0, String::from("0"), String::from("Genesis Block"));
         Blockchain {
@@ -103,7 +142,7 @@ impl Blockchain {
 
 fn main() {
     let mut blockchain = Blockchain::new();
-    blockchain.add_block(String::from("First Block"));
+    blockchain.add_block_from_file("C:/Users/PawelWiercioch/Documents/Rust/test_blockchain/src/data/data.json");
     blockchain.add_block(String::from("Second Block"));
     blockchain.add_block(String::from("Third Block"));
 

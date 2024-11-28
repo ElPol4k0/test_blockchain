@@ -1,3 +1,5 @@
+pub mod tests;
+
 use std::time::{SystemTime, UNIX_EPOCH};
 use rand::{thread_rng, Rng};
 use rand::distributions::Alphanumeric;
@@ -15,7 +17,7 @@ struct Block {
 }
 
 impl Block {
-    fn generate_random_chars() -> String {
+   pub fn generate_random_chars() -> String {
         thread_rng()
             .sample_iter(&Alphanumeric)
             .filter(|random_char| random_char.is_ascii_alphabetic())

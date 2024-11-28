@@ -50,7 +50,7 @@ impl Block {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-struct PersoenlicheDaten {
+struct persoenliche_daten {
     vorname: String,
     nachname: String,
     geburtsdatum: String,
@@ -61,7 +61,7 @@ struct PersoenlicheDaten {
 
 #[derive(Serialize, Deserialize, Debug)]
 struct BlockData {
-    persoenlicheDaten: PersoenlicheDaten,
+    persoenliche_daten: persoenliche_daten,
 }
 
 
@@ -80,18 +80,16 @@ impl Blockchain {
         let data = format!(
             /* "Name: {} {}, Geburtsdatum: {}, Geburtsort: {}, Familienstand: {}, Kinder: {}", */
             "{} {} {} {} {} {}",
-            block_data.persoenlicheDaten.vorname,
-            block_data.persoenlicheDaten.nachname,
-            block_data.persoenlicheDaten.geburtsdatum,
-            block_data.persoenlicheDaten.geburtsort,
-            block_data.persoenlicheDaten.familienstand,
-            block_data.persoenlicheDaten.kinder
+            block_data.persoenliche_daten.vorname,
+            block_data.persoenliche_daten.nachname,
+            block_data.persoenliche_daten.geburtsdatum,
+            block_data.persoenliche_daten.geburtsort,
+            block_data.persoenliche_daten.familienstand,
+            block_data.persoenliche_daten.kinder
         );
     
         self.add_block(data);
     }
-
-
 
     fn new() -> Self {
         let genesis_block = Block::new(0, String::from("0"), String::from("Genesis Block"));
@@ -141,7 +139,8 @@ impl Blockchain {
 fn main() {
     let mut blockchain = Blockchain::new();
     blockchain.add_block_from_file("C:/Users/PawelWiercioch/Documents/Rust/test_blockchain/src/data/data.json");
-/*     blockchain.add_block(String::from("Second Block"));
+
+    /*blockchain.add_block(String::from("Second Block"));
     blockchain.add_block(String::from("Third Block")); */
 
     for _ in 1..=5 {
@@ -149,7 +148,7 @@ fn main() {
         blockchain.add_block(last_block_data);
     }
     
-    
+
 
     println!("Blockchain: {:#?}", blockchain);
     println!("Is blockchain valid? {}", blockchain.is_valid());

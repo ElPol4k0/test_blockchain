@@ -139,8 +139,7 @@ impl Blockchain {
 fn main() {
     let mut blockchain = Blockchain::new();
     blockchain.add_block_from_file("C:/Users/PawelWiercioch/Documents/Rust/test_blockchain/src/data/data.json");
-
-    /*blockchain.add_block(String::from("Second Block"));
+/*     blockchain.add_block(String::from("Second Block"));
     blockchain.add_block(String::from("Third Block")); */
 
     for _ in 1..=5 {

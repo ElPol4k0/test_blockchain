@@ -1,12 +1,9 @@
 pub mod tests;
 use serde::{Serialize, Deserialize};
 use std::fs;
-use serde_json::Result;
 use std::time::{SystemTime, UNIX_EPOCH};
 use rand::{thread_rng, Rng};
 use rand::distributions::Alphanumeric;
-
-
 
 #[derive(Debug, Clone)]
 struct Block {
@@ -81,7 +78,8 @@ impl Blockchain {
         let block_data: BlockData = serde_json::from_str(&file_content).expect("Unable to parse JSON");
     
         let data = format!(
-            "Name: {} {}, Geburtsdatum: {}, Geburtsort: {}, Familienstand: {}, Kinder: {}",
+            /* "Name: {} {}, Geburtsdatum: {}, Geburtsort: {}, Familienstand: {}, Kinder: {}", */
+            "{} {} {} {} {} {}",
             block_data.persoenlicheDaten.vorname,
             block_data.persoenlicheDaten.nachname,
             block_data.persoenlicheDaten.geburtsdatum,
@@ -143,8 +141,15 @@ impl Blockchain {
 fn main() {
     let mut blockchain = Blockchain::new();
     blockchain.add_block_from_file("C:/Users/PawelWiercioch/Documents/Rust/test_blockchain/src/data/data.json");
-    blockchain.add_block(String::from("Second Block"));
-    blockchain.add_block(String::from("Third Block"));
+/*     blockchain.add_block(String::from("Second Block"));
+    blockchain.add_block(String::from("Third Block")); */
+
+    for _ in 1..=5 {
+        let last_block_data = blockchain.get_last_block().data.clone();
+        blockchain.add_block(last_block_data);
+    }
+    
+    
 
     println!("Blockchain: {:#?}", blockchain);
     println!("Is blockchain valid? {}", blockchain.is_valid());

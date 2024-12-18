@@ -1,6 +1,7 @@
 #[cfg(test)]
 mod tests {
-    use super::*;
+    use crate::*;
+
     fn create_test_data(text: String) -> StringData {
         StringData(text)
     }
@@ -8,21 +9,18 @@ mod tests {
     #[test]
     fn test_blockchain_validity() {
         let mut blockchain = Blockchain::new(create_test_data("Genesis Block".to_string()));
-        
+       
         // Füge 100 Blöcke hinzu
         for i in 1..=100 {
             blockchain.add_block(create_test_data(format!("Block {}", i)));
         }
-
        
         for i in 1..blockchain.chain.len() {
             let previous_block = &blockchain.chain[i - 1];
             let current_block = &blockchain.chain[i];
-            
+           
             assert_eq!(current_block.previous_hash, previous_block.hash);
-            
             assert_eq!(current_block.index, previous_block.index + 1);
-            
             assert!(current_block.is_valid());
         }
         assert!(blockchain.is_valid());
@@ -36,8 +34,7 @@ mod tests {
                 "test_hash".to_string(),
                 create_test_data("test data".to_string())
             );
-            
-            
+           
             let chars = &block.metadata.chars;
             assert_eq!(chars.len(), 4);
             assert!(chars.chars().all(|c| c.is_ascii_alphabetic()));
@@ -60,7 +57,7 @@ mod tests {
     #[test]
     fn test_blockchain_creation() {
         let blockchain = Blockchain::new(create_test_data("Genesis".to_string()));
-        
+       
         assert_eq!(blockchain.chain.len(), 1);
         assert_eq!(blockchain.chain[0].index, 0);
         assert_eq!(blockchain.chain[0].previous_hash, "0");

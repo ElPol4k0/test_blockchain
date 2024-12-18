@@ -1,13 +1,13 @@
+mod tests;
+
 use std::time::{SystemTime, UNIX_EPOCH};
 use rand::{thread_rng, Rng};
 use rand::distributions::Alphanumeric;
 use serde::{Serialize, Deserialize};
 
-
 pub trait BlockData: Clone + std::fmt::Debug {
     fn to_string(&self) -> String;
 }
-
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BlockMetadata {
@@ -17,7 +17,6 @@ pub struct BlockMetadata {
     pub additional_info: Option<String>,
 }
 
-// Hauptblock-Struktur
 #[derive(Debug, Clone)]
 pub struct Block<T: BlockData> {
     pub index: u64,
@@ -26,7 +25,6 @@ pub struct Block<T: BlockData> {
     pub data: T,
     pub metadata: BlockMetadata,
 }
-
 
 impl<T: BlockData> Block<T> {
     fn generate_random_chars() -> String {
@@ -43,9 +41,9 @@ impl<T: BlockData> Block<T> {
             .duration_since(UNIX_EPOCH)
             .expect("Time went backwards")
             .as_millis();
-            
+           
         let chars = Self::generate_random_chars();
-        
+       
         let metadata = BlockMetadata {
             timestamp,
             chars,
@@ -60,7 +58,6 @@ impl<T: BlockData> Block<T> {
             data,
             metadata,
         };
-
         block.hash = block.calculate_hash();
         block
     }
@@ -81,12 +78,10 @@ impl<T: BlockData> Block<T> {
     }
 }
 
-// Blockchain-Struktur
 #[derive(Debug)]
 pub struct Blockchain<T: BlockData> {
-    chain: Vec<Block<T>>,
+    pub chain: Vec<Block<T>>,  // Geändert zu pub für Tests
 }
-
 
 impl<T: BlockData> Blockchain<T> {
     pub fn new(genesis_data: T) -> Self {
@@ -118,7 +113,6 @@ impl<T: BlockData> Blockchain<T> {
             if !current.is_valid() {
                 return false;
             }
-
             if current.previous_hash != previous.hash {
                 return false;
             }
@@ -127,9 +121,8 @@ impl<T: BlockData> Blockchain<T> {
     }
 }
 
-
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct StringData(String);
+pub struct StringData(pub String);  // Geändert zu pub für Tests
 
 impl BlockData for StringData {
     fn to_string(&self) -> String {
@@ -139,11 +132,11 @@ impl BlockData for StringData {
 
 fn main() {
     let mut blockchain = Blockchain::new(StringData("Genesis Block".to_string()));
-    
+   
     blockchain.add_block(StringData("First Block".to_string()));
     blockchain.add_block(StringData("Second Block".to_string()));
     blockchain.add_block(StringData("Third Block".to_string()));
-    
+   
     println!("Blockchain: {:#?}", blockchain);
     println!("Is blockchain valid? {}", blockchain.is_valid());
 }

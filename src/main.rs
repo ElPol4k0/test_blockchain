@@ -22,7 +22,6 @@ impl Block {
             .take(4)
             .map(|random_char| random_char  as char)
             .collect()
-
     }
 
     fn new(index: u64, previous_hash: String, data: String) -> Self {
